@@ -1,0 +1,14 @@
+<div class="collection-promotion-wrapper">
+  <div class="pattern">
+      <div class="container">
+        <div class="collection-promotion clearfix">
+          {%- if settings.collection_promo_banner -%}
+          {%- section "banner" -%}
+          {%- endif -%}
+          {%- if settings.collection_promo_brand -%}
+          {%- section "brands"-%}
+          {%- endif -%}
+        </div>
+      </div>
+  </div>
+</div>

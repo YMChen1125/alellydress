@@ -1,0 +1,201 @@
+<style>
+  {%- if section.settings.bg_color != blank -%}
+  #primary-{{section.id}} .mobile-nav-wrapper{
+    background-color: {{section.settings.bg_color}}
+  }
+  {%- endif -%}
+  {%- if section.settings.content_color != blank -%}
+  .mobile-nav .mobile-nav__item,
+  .mobile-nav .mobile-nav__item a {
+    color: {{section.settings.content_color}}	
+  }
+  {%- endif -%}
+  {%- if section.settings.border_color != blank -%} 
+  .mobile-nav .mobile-nav__item {
+    border-color: {{section.settings.border_color}}
+  }
+  {%- endif -%}
+</style>
+<div id="primary-{{section.id}}"  data-section-id="{{ section.id }}" data-section-type="mobile-nav-section">
+  <nav class="mobile-nav-wrapper">
+    <ul class="mobile-nav">
+      <li class="mobile-nav__item">
+        <div class="mobile-nav-icon">
+          <button type="button"><span></span></button>{{ 'general.header.close' | t }}
+        </div>
+      </li>
+      
+      {%- if section.settings.linklist != blank -%}
+        {%- for link in linklists[section.settings.linklist].links -%}
+          {%- include 'mobile-navigation-link' -%}
+        {%- endfor -%}
+      {%- endif -%}
+      
+      {% capture the_snippet_auth %}{% include 'socialshopwave-widget-auth' %}{% endcapture %}
+      {% if the_snippet_auth contains 'Liquid error' %}
+
+
+      {%- if shop.customer_accounts_enabled -%}
+      <li class="mobile-nav__item">
+        <a href="/account" class="mobile-nav__link">
+          {%- if customer -%}
+          {{ 'general.top.my_account' | t }}
+          {%- else -%}
+          {{ 'general.top.login' | t }}
+          {%- endif -%}
+        </a>
+      </li>
+      {%- endif -%}
+
+      {% else %}
+      <li class="mobile-nav__item">
+        {% if shop.customer_accounts_enabled %}
+        <div id="ssw-topauth" class="ssw-topauth">
+          {% if customer %}
+          <div class="ssw-mobile-sidebar">
+            <div class="ssw-tprofile ssw-dropdown">
+              <a class="ssw-dropdown-toggle" data-toggle="ssw-dropdown" href="javascript:void(0);">
+                <i class="ssw-icon-user"></i>
+                {{ customer.first_name }}
+                {% if customer.last_name != 'Unknown' %}
+                {{ customer.last_name | slice:0 | upcase }}.
+                {% endif %}
+                <i class="ssw-icon-down-open-big"></i>
+              </a>
+              <ul class="ssw-dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <li id="customer_myorders_li"><a tabindex="-1" href="/account">{{ 'socialshopwave.my_orders' | t }}</a></li>
+                {% include 'ssw-widget-dropdown' %}
+                <li class="ssw-divider"></li>
+                <li><a id="customer_logout_link" tabindex="-1" href="/account/logout">{{ 'socialshopwave.logout' | t }}</a></li>
+              </ul>
+            </div>
+          </div>
+          {% else %}
+          <a id="customer_login_link" href="javascript:void(0);" data-toggle="ssw-modal" data-target="#login_modal" onclick="trackShopStats('login_popup_view', 'all')">{{ 'socialshopwave.log_in' | t }}</a>
+          <span class="ssw-login-divider">/</span>
+          <a id="customer_register_link" data-toggle="ssw-modal" data-target="#signup_modal" href="javascript:void(0);" onclick="trackShopStats('login_popup_view', 'all')">{{ 'socialshopwave.sign_up' | t }}</a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </li>
+      {% endif %}
+      
+      {%- if settings.wishlist_enable and settings.wishlist_page -%}
+      <li class="mobile-nav__item">
+        <a href="/pages/{{ settings.wishlist_page }}" class="mobile-nav__link">{{ 'general.top.wishlist' | t }}</a>
+      </li>
+      {%- endif -%}
+      
+      {%- if settings.show_multiple_currencies -%}
+      <li class="mobile-nav__item mobile-nav-currency">
+        {%- include 'currencies-switcher', _has_language: false -%}
+      </li>
+      {%- endif -%}
+      
+      <li class="mobile-nav__item mobile-nav-language"></li>
+    </ul>
+  </nav>
+  <ul class="mobile-nav-bar">
+    <li class="mobile-nav-item mobile-nav-icon">
+      <button type="button"><span></span></button>
+    </li>
+    <li class="mobile-nav-item mobile-nav-search">
+      <svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#global__symbols-search"></use></svg>
+    </li>
+    
+    {% capture the_snippet_auth %}{% include 'socialshopwave-widget-auth' %}{% endcapture %}
+    {% if the_snippet_auth contains 'Liquid error' %}
+
+    <li class="mobile-nav-item mobile-nav-profile">
+      <a href="/account"><svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#global__symbols-profile"></use></svg></a>
+    </li>
+    {% else %}
+    <li class="mobile-nav-item mobile-nav-profile">
+    
+        {% if shop.customer_accounts_enabled %}
+        <div id="ssw-topauth" class="ssw-topauth">
+          {% if customer %}
+          <div class="ssw-tprofile ssw-dropdown">
+            <a class="ssw-dropdown-toggle" data-toggle="ssw-dropdown" href="javascript:void(0);">
+              <svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#global__symbols-profile"></use></svg>
+            </a>
+            <ul class="ssw-dropdown-menu" role="menu" aria-labelledby="dLabel">
+              <li id="customer_myorders_li"><a tabindex="-1" href="/account">{{ 'socialshopwave.my_orders' | t }}</a></li>
+              {% include 'ssw-widget-dropdown' %}
+              <li class="ssw-divider"></li>
+              <li><a id="customer_logout_link" tabindex="-1" href="/account/logout">{{ 'socialshopwave.logout' | t }}</a></li>
+            </ul>
+          </div>
+          {% else %}
+          <a id="customer_login_link" href="javascript:void(0);" data-toggle="ssw-modal" data-target="#login_modal" onclick="trackShopStats('login_popup_view', 'all')">
+            <svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#global__symbols-profile"></use></svg>
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+      
+    </li>
+    {% endif %}
+    <li class="mobile-nav-item mobile-nav-cart">
+      <a href="/cart">
+        <svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#global__symbols-cart-desktop"></use></svg>
+        <span class="total_count_ajax">{{ cart.item_count }}</span>
+      </a>
+    </li>
+  </ul>
+  <form action="/search" method="get" role="search" class="mobile-nav-search-form">
+    <div class="mobile-nav-search-close"><span></span></div>
+    <input type="search" name="q" class="input-block-level search-query" placeholder="{{ 'search.general.placeholder' | t }}" />
+    <div class="autocomplete-results"></div>
+    <input type="hidden" name="type" value="product" />
+  </form>
+  <div class="mobile-nav-logo text-center">
+    <div class="container">
+      <a href="{{shop.url}}" title="{{ shop.name | escape }}">
+        {%- assign _logo = "logo.png" | asset_img_url: 'master'  -%}
+        {%- if settings.main_logo != blank -%}
+        {%- assign _logo = settings.main_logo | img_url: 'master' -%}
+        {%- endif -%}
+        <img src="{{ _logo }}"{{' '}}{%-if settings.mobile_logo_max_width != blank -%}style="max-width:{{settings.mobile_logo_max_width}}px;"{%-endif-%}{{' '}}title="{{ shop.name | escape }}" alt="{{ shop.name | escape }}" />
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Mobile Nagivation",
+	"class": "header-mobile-section",
+    "settings": [
+		{
+			"type": "header",
+			"content": "General"
+		},
+		{
+            "type": "link_list",
+            "id": "linklist",
+            "label": "Choose a Linklist"
+		},
+		{
+			"type": "header",
+			"content": "Styling"
+		},
+		{
+			"type": "color",
+			"id": "bg_color",
+			"label": "Background"
+		},
+		{
+			"type": "color",
+			"id": "content_color",
+			"label": "Content"
+		},
+		{
+			"type": "color",
+			"id": "border_color",
+			"label": "Border"
+		}
+		
+	]
+  }
+{% endschema %}

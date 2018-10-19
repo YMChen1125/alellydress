@@ -1,0 +1,104 @@
+<header class="header-type-5">
+  <div class="background-header"></div>
+  <div class="slider-header">
+    <!-- Top of pages -->
+    <div id="top" class="{%- if settings.header_layout == '1' -%}full-width{%- elsif settings.header_layout == '4' -%}fixed3 fixed2{%- elsif settings.header_layout == '3' -%}fixed2{%- else -%}fixed{%- endif -%}">
+      <div class="background-top"></div>
+      <div class="background">
+        <div class="shadow"></div>
+        <div class="pattern">
+          <div class="container">
+            <div class="row">
+              <!-- Header Left -->
+              <div class="col-sm-4" id="header-left">		
+                <!-- Logo -->
+                {%- include "header-logo" -%}
+              </div>
+              <!-- Header Right -->
+              <div class="col-sm-8 orderable" id="header-right">
+                {%- section 'header-top-block' -%}
+                <!-- Search -->
+                <form action="/search" method="get" role="search" class="search_form">
+                  <div class="button-search">{%- include "search-icon" with "form" -%}</div>
+                  <input type="search" name="q"  class="input-block-level search-query" id="search_query" placeholder="{{ 'search.general.placeholder' | t }}" />
+                  <div id="autocomplete-results" class="autocomplete-results"></div>
+                  <input type="hidden" name="type" value="product" />
+                </form>
+                <!-- Currency & Language -->
+                {%- include 'currencies-switcher' -%}
+                
+                {% capture the_snippet_auth %}{% include 'socialshopwave-widget-auth' %}{% endcapture %}
+                {% if the_snippet_auth contains 'Liquid error' %}
+
+                {%- if shop.customer_accounts_enabled -%}
+                <a href="/account" class="my-account">{%- include "account-icon" -%}</a>
+                {%- endif -%}
+                {% else %}
+                
+                  {% if shop.customer_accounts_enabled %}
+                  <div id="ssw-topauth" class="ssw-topauth">
+                    {% if customer %}
+                    <div class="ssw-tprofile ssw-dropdown">
+                      <a class="ssw-dropdown-toggle" data-toggle="ssw-dropdown" href="javascript:void(0);">
+                        <i class="ssw-icon-user"></i>
+                        {{ customer.first_name }}
+                        {% if customer.last_name != 'Unknown' %}
+                        {{ customer.last_name | slice:0 | upcase }}.
+                        {% endif %}
+                        <i class="ssw-icon-down-open-big"></i>
+                      </a>
+                      <ul class="ssw-dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li id="customer_myorders_li"><a tabindex="-1" href="/account">{{ 'socialshopwave.my_orders' | t }}</a></li>
+                        {% include 'ssw-widget-dropdown' %}
+                        <li class="ssw-divider"></li>
+                        <li><a id="customer_logout_link" tabindex="-1" href="/account/logout">{{ 'socialshopwave.logout' | t }}</a></li>
+                      </ul>
+                    </div>
+                    {% else %}
+                    <a id="customer_login_link" class="my-account" href="javascript:void(0);" data-toggle="ssw-modal" data-target="#login_modal" onclick="trackShopStats('login_popup_view', 'all')">
+                      {%- include "account-icon" -%}
+                    </a>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                
+                {% endif %}
+                
+                {%- include 'cartblock' with 'header' -%}
+              </div>
+            </div>
+          </div>
+          {%- assign megamenu_type_having_2ndMenu = '4,5,6,9,14,19,29' | split: ',' -%}
+          {%- if megamenu_type_having_2ndMenu contains settings.advanced_megamenu_type -%}
+          <div class="container container-megamenu2 orderable">
+            {%- endif -%}
+            <!-- Menu -->
+            <div  class="megamenu-background">
+              <div class="">
+                <div class="overflow-megamenu container">
+                  <div class="row mega-menu-modules">
+                    {%- section 'header-menu1' -%}
+                    {%- section 'header-menu2' -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- if megamenu_type_having_2ndMenu contains settings.advanced_megamenu_type -%}
+          </div>
+          {%- endif -%}
+          {%- comment -%}MEGAMENU2{%- endcomment -%}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Slider -->
+  <div id="slider" class="{%- if settings.slideshow_layout == '1' -%}full-width{%- elsif settings.slideshow_layout == '4' -%}fixed3 fixed2{%- elsif settings.slideshow_layout == '3' -%}fixed2{%- else -%}fixed{%- endif -%}">
+    <div class="background-slider"></div>
+    <div class="background">
+      <div class="shadow"></div>
+      <div class="pattern orderable">
+        {%- include 'header-slideshow' -%}
+      </div>
+    </div>
+  </div>
+</header>

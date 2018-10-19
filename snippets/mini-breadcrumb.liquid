@@ -1,0 +1,60 @@
+<div class="mini-breadcrumb {{breadcrumb_class}}">
+  <div class="background">
+    <div class="pattern">
+      <div class="container">
+        <div class="breadcrumb-content clearfix">
+          <ul itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="1">
+              <a href="{{shop.url }}">{{ 'general.breadcrumbs.home' | t }} </a>
+            </li>
+            {%- assign custom_template = template | split:'.' -%}
+            {%- case custom_template[0] -%}
+            {%- when 'blog' -%}
+            {%- if current_tags.size > 0 -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="2">{{blog.title | link_to: blog.url}}</li>
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="3">{%- for tag in current_tags -%}{%- if forloop.index > 1 -%}{{' '}}+{{' '}}{%- endif -%}{{tag}}{%- endfor -%}</li>
+            {%- else -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="2">{{blog.title}}</li>
+            {%- endif -%}
+            {%- when 'article' -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="2">{{blog.title | link_to: blog.url}}</li>
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="3">{{article.title}}</li>
+            {%- when 'product' -%}
+            {%- if collection != blank -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="2">{{collection.title | link_to: collection.url}}</li>
+            {%- else -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="2">{{product.vendor | link_to_vendor}}</li>
+            {%- endif -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="3">{{product.title}}</li>
+            {%- when 'collection' -%}
+            {%- if current_tags.size > 0 -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="2">{{collection.title | link_to: collection.url}}</li>
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="3">{%- for tag in current_tags -%}{%- if forloop.index > 1 -%}{{' '}}+{{' '}}{%- endif -%}{{tag}}{%- endfor -%}</li>
+            {%- else -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="2">{{collection.title}}</li>
+            {%- endif -%}
+            {%- when 'page' -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="2">{{page.title}}</li>
+            {%- else -%}
+            <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" >
+              <meta itemprop="position" content="2">{{page_title}}</li>
+            {%- endcase -%}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

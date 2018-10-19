@@ -1,0 +1,12 @@
+<div class="item-images-wrapper">
+  <a href="javascript:void(0);" class="active" data-_image="{{ featured_image | product_img_url:"master" }}" data-_dim="_{{_dim}}">
+    <img src="{{ featured_image | img_url: '100x' }}" />
+  </a>
+  {%- for image in product.images limit: item-images -%}
+  {%- unless image == featured_image -%}
+  <a href="javascript:void(0);" data-_image="{{ image.src  | img_url:"master" }}"  data-_dim="_{{_dim}}">
+    <img src="{{ image.src | img_url: '100x' }}" />
+  </a>
+  {%- endunless -%}
+  {%- endfor -%}
+</div>
